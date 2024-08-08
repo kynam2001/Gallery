@@ -13,6 +13,8 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore.Images.Media
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -111,7 +113,38 @@ class MainActivity : AppCompatActivity() {
             if(currentindex == imagePaths.size) {
                 currentindex = 0
             }
+            Log.e("click","CurrentIndex: $currentindex")
             loadImage(currentindex)
         }
+        binding.imageView.setOnTouchListener(object : OnSwipeTouchListener(this) {
+            override fun onSwipeLeft() {
+                currentindex--
+                if(currentindex == -1) {
+                    currentindex = imagePaths.size-1
+                }
+                Log.e("swipeLeft","CurrentIndex: $currentindex")
+                loadImage(currentindex)
+            }
+
+            override fun onSwipeRight() {
+                currentindex++
+                if(currentindex == imagePaths.size) {
+                    currentindex = 0
+                }
+                Log.e("swipeRight","CurrentIndex: $currentindex")
+                loadImage(currentindex)
+            }
+
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+                super.onTouch(v, event)
+                currentindex++
+                if(currentindex == imagePaths.size) {
+                    currentindex = 0
+                }
+                Log.e("click","CurrentIndex: $currentindex")
+                loadImage(currentindex)
+                return true
+            }
+        })
     }
 }
